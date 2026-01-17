@@ -15,6 +15,7 @@
     "jsx": "react-jsx",
 
     /* Linting */
+<<<<<<< HEAD
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
@@ -25,6 +26,12 @@
     "paths": {
       "@/*": ["./src/*"]
     }
+=======
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+>>>>>>> 1552333ab5418c4b478d58ee32e0c2223fcf9471
   },
   "include": ["src"]
 }
