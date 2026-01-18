@@ -18,6 +18,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { useStores } from "@/hooks/useStores";
+import { API_BASE } from "@/lib/api";
 
 const apps = [
   {
@@ -84,7 +85,7 @@ const Aplicativos = () => {
         toast({ title: "Selecione uma loja", description: "Escolha a loja no topo" });
         return;
       }
-      const res = await fetch("http://localhost:4000/api/shopify/config", {
+      const res = await fetch(`${API_BASE}/api/shopify/config`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -111,7 +112,7 @@ const Aplicativos = () => {
         return;
       }
       setSyncing(true);
-      const res = await fetch("http://localhost:4000/api/shopify/sync/products", {
+      const res = await fetch(`${API_BASE}/api/shopify/sync/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_loja: selectedStore.id }),
@@ -131,7 +132,7 @@ const Aplicativos = () => {
   useEffect(() => {
     const load = async () => {
       if (!selectedStore?.id) return;
-      const r = await fetch(`http://localhost:4000/api/shopify/config/${selectedStore.id}`);
+      const r = await fetch(`${API_BASE}/api/shopify/config/${selectedStore.id}`);
       const d = await r.json();
       if (d.ok && d.config) {
         setShopUrl(d.config.url_shopify || "");
