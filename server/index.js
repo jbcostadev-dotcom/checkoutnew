@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import pkg from "pg";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
@@ -12,6 +14,9 @@ const { Pool } = pkg;
 const DATABASE_URL = process.env.DATABASE_URL;
 const PORT = process.env.PORT || 4000;
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const pool = new Pool({
   connectionString: DATABASE_URL,
@@ -358,6 +363,15 @@ app.get("/api/products/by-store/:id_loja", async (req, res) => {
     res.status(500).json({ ok: false, error: e.message });
   }
 });
+
+if (process.env.NODE_ENV === "production") {
+  const distPath = path.resolve(__dirname, "../dist");
+  app.use(express.static(distPath));
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api/")) return next();
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`API rodando em http://localhost:${PORT}`);
